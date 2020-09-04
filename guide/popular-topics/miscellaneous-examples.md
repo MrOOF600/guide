@@ -48,7 +48,7 @@ client.on('message', message => {
 	if (message.content === '!play') {
 		if (message.channel.type === 'dm') return;
 
-		const { voiceChannel } = message.member;
+		const voiceChannel = message.member.voice.channel;
 
 		if (!voiceChannel) {
 			return message.reply('please join a voice channel first!');
@@ -76,6 +76,7 @@ const ytdl = require('ytdl-core');
 const client = new Discord.Client();
 
 client.on('message', message => {
+const args = message.content.substring(PREFIX.length).split(' ');
 	if (message.content === '!play') {
 		if (message.channel.type === 'dm') return;
 
@@ -86,7 +87,7 @@ client.on('message', message => {
 		}
 
 		voiceChannel.join().then(connection => {
-			const stream = ytdl('https://www.youtube.com/watch?v=D57Y1PruTlw', { filter: 'audioonly' });
+			const stream = ytdl(args[1], { filter: 'audioonly' });
 			const dispatcher = connection.play(stream);
 
 			dispatcher.on('finish', () => voiceChannel.leave());
